@@ -1,0 +1,59 @@
+#myCarousel{
+    padding-top: 51px;
+}
+.dropdown-menu{
+    max-height: 200px;
+    overflow: scroll;
+}
+.menu_item{
+    margin-left: 270px;
+}
+.navbar-brand {
+    padding: 3px 30px;
+}
+hr {
+
+    border-top: 1px solid #020202;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+body{
+    color: black;
+    font-family: Arial;
+}
+
+
+/*----------------------------chuyển lên đầu trang-------------------*/
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 6px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #7CFC00;
+    color: white;
+    cursor: pointer;
+    padding: 13px;
+    border-radius: 10px;
+}
+
+#myBtn:hover {
+    background-color: #555;
+}
+
+
+.panel-footer{
+    background-color: #222222;
+    color: white;
+}
+.panel-footer hr{
+    border-top: 1px solid #fcfcfc;
+}
+.iconDT img{
+    margin: 10px 0;
+}
