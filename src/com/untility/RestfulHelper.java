@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 public class RestfulHelper {
+
     public static Gson gson = new Gson();
     private static Logger LOGGER = Logger.getLogger(RestfulHelper.class.toString());
 

@@ -4,6 +4,8 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
+import java.util.HashMap;
+
 @Entity
 public class Showtime {
 
@@ -101,5 +103,39 @@ public class Showtime {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    public HashMap<String, String> validate(){
+        HashMap<String, String> errors = new HashMap<>();
+        if (this.showTimeId < 0) {
+            errors.put("showTimeId", "Please enter showTimeId");
+        }
+        if (this.date == null || this.date.length() == 0){
+            errors.put("date", "Please enter date");
+        }
+        if (this.day < 0){
+            errors.put("day", "Please enter day");
+        }
+        if (this.month < 0){
+            errors.put("month", "Please enter month");
+        }
+        if (this.hour < 0){
+            errors.put("hour", "Please enter hour");
+        }
+        if (this.slotLeft < 0){
+            errors.put("slotLeft", "Please enter slotLeft");
+        }
+        if (this.movieId == null || this.movieId.length() == 0){
+            errors.put("movieId", "Please enter movieId");
+        }
+        if (this.theaterId == null || this.theaterId.length() == 0){
+            errors.put("theaterId", "Please enter theaterId");
+        }
+        if (this.minute <0){
+            errors.put("minute", "Please enter minute");
+        }
+
+
+        return errors;
     }
 }

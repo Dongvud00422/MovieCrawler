@@ -3,6 +3,10 @@
 <%@ page import="com.Crawler.entity.ListResponseCity" %>
 <%@ page import="com.Crawler.entity.ListResponseMovies" %>
 <%@ page import="com.Crawler.entity.Movie" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.untility.RestfulHelper" %>
+<%@ page import="com.google.gson.JsonElement" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +14,8 @@
     <title>Phim hay mỗi ngày</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="./css/style-index.css" type="text/css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style-index.css" type="text/css">
 
 </head>
 <body>
@@ -26,36 +30,45 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img src="img/icon-logo.png" style="width: 40%"></a>
+                <a class="navbar-brand" href="#"><img src="/img/icon-logo.png" style="width: 40%"></a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-center menu_item">
                     <li class="active"><a href="#">Phim</a></li>
-                    <li><a href="lich-chieu.jsp">Lịch chiếu</a></li>
+                    <li><a href="/lich-chieu.jsp">Lịch chiếu</a></li>
                     <li><a href="#">Cụm Rạp</a></li>
                     <li><a href="#">Ứng dụng</a></li>
 
                 </ul>
 
-                <form class="navbar-form navbar-right">
+                <form class="navbar-form navbar-right" action="/movie" method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Nhập từ khóa cần tìm">
+                        <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa cần tìm">
                     </div>
                     <button type="submit" class="btn btn-default">Tìm kiếm</button>
                 </form>
+                <% Gson gsonMovie = new Gson();
+                    ListResponseMovies listMovie = gsonMovie.fromJson((String) request.getAttribute("listMovie"), ListResponseMovies.class);
+                %>
 
                 <%
-                    Gson gsonCity = new Gson();
-                    ListResponseCity listCity = gsonCity.fromJson((String) request.getAttribute("listCity"), ListResponseCity.class);
+                   // List<City> listCity = (List<City>) request.getAttribute("listCity");
+                    ListResponseCity listCity = RestfulHelper.gson.fromJson((String) request.getAttribute("listCity"), ListResponseCity.class);
                 %>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown"><a id="city" class="dropdown-toggle" data-toggle="dropdown" href="#">Thành phố
-                        hiện tại<span class="caret"></span></a>
+                    <li class="dropdown"><a id="city" class="dropdown-toggle" data-toggle="dropdown" href="#"><%=listCity.getDataCity().get(11).getName()%><span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <%for (City cityName : listCity.getDataCity()) {%>
+                            <%for (City city : listCity.getDataCity()){
+                            String[] arr = city.getName().split(" ");
+                            String params="";
+                            for(String c : arr){
+                                params+=c+"_";
+                            }
+                            %>
+
                             <li>
-                                <a href="#" onclick=choice('<%=cityName.getName()%>_""')><%=cityName.getName()%>
+                                <a onClick=choice('<%=params%>')><%=city.getName()%>
                                 </a></li>
 
                             <%}%>
@@ -72,17 +85,17 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <div class="item active">
-            <img src="img/slide-phim1.jpg" style="width:100%;">
+            <img src="/img/slide-phim1.jpg" style="width:100%;">
         </div>
         <div class="item">
-            <img src="img/slide-phim2.jpg" style="width:100%;">
+            <img src="/img/slide-phim2.jpg" style="width:100%;">
         </div>
 
         <div class="item">
-            <img src="img/slide-phim3.jpg" style="width:100%;">
+            <img src="/img/slide-phim3.jpg" style="width:100%;">
         </div>
         <div class="item">
-            <img src="img/slide-phim4.jpg" style="width:100%;">
+            <img src="/img/slide-phim4.jpg" style="width:100%;">
         </div>
     </div>
     <!-- Left and right controls -->
@@ -100,37 +113,23 @@
 <div class="container">
     <h2>Phim Đang Chiếu</h2>
     <hr/>
-    <% Gson gsonMovie = new Gson();
-        ListResponseMovies listMovie = gsonMovie.fromJson((String) request.getAttribute("listMovie"), ListResponseMovies.class);
-    %>
+
     <div class="row">
         <%
-            for (Movie movie : listMovie.getDataMovie()) {
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//            Date date = sdf.parse("01/12/2017");
-//            long millis = date.getTime();
-//            System.out.println(millis);
-//
-//
-//
-//
-//            long currentTime = System.currentTimeMillis();
-//            if(millis < currentTime){
-
-
+            for (Movie movie : listMovie.getDataMovie())
+            {
         %>
         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
 
-            <a href="lich-chieu.jsp"><img src="<%=movie.getPoster()%>" style="width:100%;"></a>
-            <a href="lich-chieu.jsp"><h4><%=movie.getMovieName()%>
-            </h4></a>
+            <a class="fix" href="/movie/showtime?movieId=<%=movie.getMovieId()%>&cityName=" tabindex="0"><img src="<%=movie.getPoster()%>" style="width:100%;"></a>
+            <a href="/movie/showtime?movieId=<%=movie.getMovieId()%>&cityName="><h4><%=movie.getMovieName()%></h4></a>
         </div>
-        <%--<%}%>--%>
+
         <%}%>
     </div>
     <div class="row">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-4"></div>
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-8" >
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-8">
             <ul class="pagination">
                 <li class="disabled"><a href="#">&laquo;</a></li>
                 <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
@@ -153,15 +152,14 @@
         <%for (Movie movie : listMovie.getDataMovie()) {%>
         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
             <a href="#"><img src="<%=movie.getPoster()%>" style="width:100%;"></a>
-            <a href="#"><h4><%=movie.getMovieName()%>
-            </h4></a>
+            <a href="#"><h4><%=movie.getMovieName()%></h4></a>
         </div>
         <%}%>
 
     </div>
     <div class="row">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-4"></div>
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-8" >
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-8">
             <ul class="pagination">
                 <li class="disabled"><a href="#">&laquo;</a></li>
                 <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
@@ -189,21 +187,21 @@
                 <div class="col-md-3">
                     <p>ĐỐI TÁC</p>
                     <div class="row iconDT">
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon1.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon1.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon2.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon2.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon3.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon3.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon4.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon4.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon5.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon5.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon6.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon6.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon7.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon7.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="img/icon_doitac/icon8.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon8.png"
                                                                style="width: 60%"></a></div>
                     </div>
                 </div>
@@ -227,12 +225,12 @@
                     <div class="row iconDT">
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/icon-android.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/icon-android.png" style="width: 70%;">
                             </a>
                         </div>
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/icon-apple.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/icon-apple.png" style="width: 70%;">
                             </a>
                         </div>
                     </div>
@@ -242,12 +240,12 @@
                     <div class="row iconDT">
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/if_social_facebook_box_white_60824.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/if_social_facebook_box_white_60824.png" style="width: 70%;">
                             </a>
                         </div>
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/logo-zalo.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/logo-zalo.png" style="width: 70%;">
                             </a>
                         </div>
                     </div>
@@ -261,10 +259,21 @@
 <script>
 
     //    ---------------------check thành phố----------------------------------
-    function choice() {
-        alert(city);
-        document.getElementById("city").innerHTML = "" + "<span class='caret'></span>";
+    function choice(city) {
+        var arr = city.split("_");
+        var chosse = "";
+        for (var index in arr){
+            chosse+=arr[index]+" ";
+        }
+        document.getElementById("city").innerHTML = chosse.trim()+"  <span class=\"caret\"></span>";
+
+        var url = document.getElementsByClassName("fix");
+        for(var i in url){
+            var sp = url[i].href.split("cityName=");
+            url[i].href = sp[0]+"cityName="+chosse.trim();
+        }
     }
+
 
     //-----------------------chuyển lên đầu trang----------------------
 
@@ -286,7 +295,7 @@
         document.documentElement.scrollTop = 0;
     }
 </script>
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

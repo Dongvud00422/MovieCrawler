@@ -1,8 +1,6 @@
 package com.Crawler.main;
 
 import com.Crawler.controller.CGVCrawler.CrawlCgvController;
-import com.Crawler.entity.City;
-import com.googlecode.objectify.ObjectifyService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,10 +20,10 @@ public class RunDailyCrawler extends HttpServlet {
             CrawlCgvController crawlData = new CrawlCgvController();
             crawlData.getShowTimeInfo();
             System.out.println("done showtime");
-            crawlData.getMovieInfo();
+           // crawlData.getMovieInfo();
             System.out.println("done movie");
-        } catch (IOException e) {
-            e.printStackTrace(System.err);
+        } catch (Exception e) {
+            LOG.warning(e.getMessage());
         }
     }
 }

@@ -2,6 +2,7 @@ package com.Crawler.entity;
 
 import java.util.ArrayList;
 
+
 public class ListResponseMovies {
     private ArrayList<Movie> dataMovie;
     private int totalPage;

@@ -1,4 +1,8 @@
-<%--
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="com.Crawler.entity.ListResponseCity" %>
+<%@ page import="com.Crawler.entity.City" %>
+<%@ page import="com.Crawler.entity.Movie" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Nam Nguyen
   Date: 12/6/2017
@@ -11,8 +15,8 @@
     <title>Lịch chiếu phim</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/lich-chieu.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/lich-chieu.css">
 </head>
 <body>
 <header class="menu">
@@ -25,11 +29,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img src="img/icon-logo.png" style="width: 40%"></a>
+                <a class="navbar-brand" href="#"><img src="/img/icon-logo.png" style="width: 40%"></a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-center menu_item">
-                    <li><a href="index.jsp">Phim</a></li>
+                    <li><a href="/index.jsp">Phim</a></li>
                     <li class="active"><a href="#">Lịch chiếu</a></li>
                     <li><a href="#">Cụm Rạp</a></li>
                     <li><a href="#">Ứng dụng</a></li>
@@ -42,22 +46,35 @@
                     </div>
                     <button type="submit" class="btn btn-default">Tìm kiếm</button>
                 </form>
+                <%
+                    Movie movie = (Movie) request.getAttribute("movie");
+                %>
 
-                <%--<%--%>
-                <%--Gson gsonCity = new Gson();--%>
-                <%--ListResponseCity listCity = gsonCity.fromJson((String) request.getAttribute("listCity"), ListResponseCity.class);--%>
-                <%--%>--%>
+                <%
+
+                    String city = (String) request.getAttribute("city");
+                    List<City> listCity = (List<City>) request.getAttribute("listCity");
+                 %>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown"><a id="city" class="dropdown-toggle" data-toggle="dropdown" href="#">Thành phố
-                        hiện tại<span class="caret"></span></a>
+
+                    <li class="dropdown"><a id="city" class="dropdown-toggle" data-toggle="dropdown" href="#"><%=city%><span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <%--<%for (City cityName : listCity.getDataCity()) {%>--%>
-                            <%--<li>--%>
-                            <%--<a href="#" onclick=choice('<%=cityName.getName()%>_""')><%=cityName.getName()%>--%>
-                            <%--</a></li>--%>
-                            <%--<%}%>--%>
+                            <%for (City ct : listCity){
+                                String[] arr = ct.getName().split(" ");
+                                String params="";
+                                for(String c : arr){
+                                    params+=c+"_";
+                                }
+                            %>
+
+                            <li>
+                                <a  class="load" href="/movie/showtime?movieId=<%=movie.getMovieId()%>&cityName=" onClick=choice('<%=params%>')><%=ct.getName()%>
+                                </a></li>
+
+                            <%}%>
                         </ul>
+
                     </li>
                 </ul>
             </div>
@@ -65,18 +82,19 @@
     </nav>
 </header>
 
+
 <div>
-    <img class="background blur" src="img/slide-phim1.jpg" style="width: 100%">
+    <img class="background blur" src="<%=movie.getPoster()%>" style="width: 100%">
     <div class="container view_film">
         <div class="row">
             <div class="col-md-3">
-                <img id="myImg" src="img/dc-phim2.jpg" style="width: 100%">
+                <img id="myImg" src="<%=movie.getPoster()%>" style="width: 100%">
             </div>
             <div class="col-md-7 view">
-                <span>17.11.2017</span><br>
-                <span class="type">C16</span><span>  The Mountain Between Us - Ngọn Núi Giữa Hai Ta</span><br>
+                <span><%=movie.getOpenAt()%></span><br>
+                <span class="type">C16</span><span>  <%=movie.getMovieName()%></span><br>
                 <span>Thể loại: Phiêu lưu, tâm lý, tình cảm</span><br>
-                <span>120 phút - 7.5 IMDb - 2D/3D/Digital/IMAX</span><br>
+                <span><%=movie.getMinAge()%> - 7.5 IMDb - <%=movie.getType()%></span><br>
             </div>
         </div>
     </div>
@@ -86,7 +104,7 @@
 
 <div id="myModal" class="modal">
     <span class="close">&times;</span>
-    <iframe  class="modal-content" id="img01" width="560" height="315" src="https://www.youtube.com/embed/t0l0NIyZRrM" frameborder="0" gesture="media"
+    <iframe  class="modal-content" id="img01" width="560" height="315" src="<%=movie.getTrailer()%>" frameborder="0" gesture="media"
             allow="encrypted-media" allowfullscreen></iframe>
 </div>
 
@@ -104,21 +122,21 @@
                 <div class="col-md-3">
                     <p>ĐỐI TÁC</p>
                     <div class="row iconDT">
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon1.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon1.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon2.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon2.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon3.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon3.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon4.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon4.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon5.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon5.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon6.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon6.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon7.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon7.png"
                                                                style="width: 60%"></a></div>
-                        <div class="col-md-3"><a href="#"><img src="../img/icon_doitac/icon8.png"
+                        <div class="col-md-3"><a href="#"><img src="/img/icon_doitac/icon8.png"
                                                                style="width: 60%"></a></div>
                     </div>
                 </div>
@@ -142,12 +160,12 @@
                     <div class="row iconDT">
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/icon-android.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/icon-android.png" style="width: 70%;">
                             </a>
                         </div>
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/icon-apple.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/icon-apple.png" style="width: 70%;">
                             </a>
                         </div>
 
@@ -159,12 +177,12 @@
                     <div class="row iconDT">
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/if_social_facebook_box_white_60824.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/if_social_facebook_box_white_60824.png" style="width: 70%;">
                             </a>
                         </div>
                         <div class="col-md-5">
                             <a href="#">
-                                <img src="img/icon_doitac/logo-zalo.png" style="width: 70%;">
+                                <img src="/img/icon_doitac/logo-zalo.png" style="width: 70%;">
                             </a>
                         </div>
 
@@ -179,9 +197,18 @@
 <script>
 
     //    ---------------------check thành phố----------------------------------
-    function choice() {
-        alert(city);
-        document.getElementById("city").innerHTML = "" + "<span class='caret'></span>";
+    function choice(city) {
+        var arr = city.split("_");
+        var chosse = "";
+        for (var index in arr){
+            chosse+=arr[index]+" ";
+        }
+        document.getElementById("city").innerHTML = chosse.trim()+" <span class=\"caret\"></span>";
+        var url = document.getElementsByClassName("load");
+        for(var i in url){
+            var sp = url[i].href.split("cityName=");
+            url[i].href = sp[0]+"cityName="+chosse.trim();
+        }
     }
 
     //-----------------------chuyển lên đầu trang----------------------
@@ -225,7 +252,7 @@
         modal.style.display = "none";
     }
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

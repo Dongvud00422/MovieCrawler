@@ -10,19 +10,20 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class RunMonthlyCrawler extends HttpServlet{
-    Logger LOG = Logger.getLogger(RunMonthlyCrawler.class.getSimpleName());
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Logger LOG = Logger.getLogger(RunMonthlyCrawler.class.getSimpleName());
         LOG.info("Run monthly");
-        resp.getWriter().println("crawler is runing");
         try {
             CrawlCgvController cgvCrawler = new CrawlCgvController();
-           //cgvCrawler.getCgvCity();
+            cgvCrawler.getCgvCity();
             System.out.println("done city");
             cgvCrawler.getTheaterInfo();
             System.out.println("done theater");
-        } catch (IOException e){
+        } catch (Exception e) {
             e.printStackTrace(System.err);
         }
     }
+
 }

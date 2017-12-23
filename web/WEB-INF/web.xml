@@ -46,6 +46,16 @@
         <url-pattern>/test</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AdminEndpoint</servlet-name>
+        <servlet-class>com.Endpoint.AdminEndpoint</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminEndpoint</servlet-name>
+        <url-pattern>/_api/v1/admin</url-pattern>
+        <url-pattern>/_api/v1/admin/*</url-pattern>
+    </servlet-mapping>
+
 
 
 </web-app>

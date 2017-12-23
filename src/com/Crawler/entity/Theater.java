@@ -1,5 +1,7 @@
 package com.Crawler.entity;
 
+import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Field;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -78,5 +80,12 @@ public class Theater {
 
     public void setCityId(String cityId) {
         this.cityId = cityId;
+    }
+
+    public Document toSearchDocument(){
+        return Document.newBuilder()
+                .addField(Field.newBuilder().setName("theaterName").setText(this.getTheaterName()))
+                .addField(Field.newBuilder().setName("theaterId").setText(this.getTheaterId()))
+                .build();
     }
 }
