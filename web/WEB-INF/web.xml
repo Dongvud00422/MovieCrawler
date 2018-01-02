@@ -13,6 +13,8 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- ================= CRAWLER ================== -->
+
     <servlet>
         <servlet-name>dailyCrawler</servlet-name>
         <servlet-class>com.Crawler.main.RunDailyCrawler</servlet-class>
@@ -21,6 +23,7 @@
         <servlet-name>dailyCrawler</servlet-name>
         <url-pattern>/crawler/daily</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>monthlyCrawler</servlet-name>
         <servlet-class>com.Crawler.main.RunMonthlyCrawler</servlet-class>
@@ -29,22 +32,47 @@
         <servlet-name>monthlyCrawler</servlet-name>
         <url-pattern>/crawler/monthly</url-pattern>
     </servlet-mapping>
+
+    <!-- ================= CRAWLER SUPPORT ================== -->
+
     <servlet>
-        <servlet-name>HomeController</servlet-name>
-        <servlet-class>com.api.Controller.HomeController</servlet-class>
+        <servlet-name>addCitySupport</servlet-name>
+        <servlet-class>com.Crawler.support.addCityFromCrawler</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HomeController</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>addCitySupport</servlet-name>
+        <url-pattern>/crawler/city</url-pattern>
     </servlet-mapping>
+
     <servlet>
-        <servlet-name>test</servlet-name>
-        <servlet-class>com.Crawler.test.cgv</servlet-class>
+        <servlet-name>addTheaterSupport</servlet-name>
+        <servlet-class>com.Crawler.support.addTheaterFromCrawler</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>test</servlet-name>
-        <url-pattern>/test</url-pattern>
+        <servlet-name>addTheaterSupport</servlet-name>
+        <url-pattern>/crawler/theater</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addShowtimeSupport</servlet-name>
+        <servlet-class>com.Crawler.support.addShowtimeFromCrawler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addShowtimeSupport</servlet-name>
+        <url-pattern>/crawler/showtime</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addMovieSupport</servlet-name>
+        <servlet-class>com.Crawler.support.addMovieFromCrawler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addMovieSupport</servlet-name>
+        <url-pattern>/crawler/movie</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- ================= API VS SWING =================== -->
 
     <servlet>
         <servlet-name>AdminEndpoint</servlet-name>
@@ -56,6 +84,98 @@
         <url-pattern>/_api/v1/admin/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>MovieEnpoint</servlet-name>
+        <servlet-class>com.api.Endpoint.MovieEndpoint</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MovieEnpoint</servlet-name>
+        <url-pattern>/_api/v1/movie</url-pattern>
+        <url-pattern>/_api/v1/movie/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CityEnpoint</servlet-name>
+        <servlet-class>com.api.Endpoint.CityEndpoint</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CityEnpoint</servlet-name>
+        <url-pattern>/_api/v1/city</url-pattern>
+        <url-pattern>/_api/v1/city/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ShowtimeEnpoint</servlet-name>
+        <servlet-class>com.api.Endpoint.ShowtimeEndpoint</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowtimeEnpoint</servlet-name>
+        <url-pattern>/_api/v1/showtime</url-pattern>
+        <url-pattern>/_api/v1/showtime/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TheaterEnpoint</servlet-name>
+        <servlet-class>com.api.Endpoint.TheaterEndpoint</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TheaterEnpoint</servlet-name>
+        <url-pattern>/_api/v1/theater</url-pattern>
+        <url-pattern>/_api/v1/theater/*</url-pattern>
+    </servlet-mapping>
+
+
+
+
+    <!--================= WEB API=================-->
+    <servlet>
+        <servlet-name>HomeController</servlet-name>
+        <servlet-class>com.api.Controller.HomeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeController</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TheaterController</servlet-name>
+        <servlet-class>com.api.Controller.TheaterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TheaterController</servlet-name>
+        <url-pattern>/movie/theater</url-pattern>
+        <url-pattern>/movie/theater/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ShowtimeController</servlet-name>
+        <servlet-class>com.api.Controller.ShowtimeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowtimeController</servlet-name>
+        <url-pattern>/movie/showtime</url-pattern>
+        <url-pattern>/movie/showtime?*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SearchingController</servlet-name>
+        <servlet-class>com.Endpoint.SearchAPI</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchingController</servlet-name>
+        <url-pattern>/_api/v1/search</url-pattern>
+    </servlet-mapping>
+
+
+    <!--==================== TEST =====================-->
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>com.Crawler.test.test</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
 
 
 </web-app>

@@ -5,25 +5,29 @@ import com.google.appengine.api.search.Field;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
+// Thông tin các cụm rạp.
 @Entity
 public class Theater {
 
-    // Thông tin các cụm rạp.
     @Id
     private String theaterId;
-    @Index
+    @Unindex
     private String theaterName;
-    @Index
+    @Unindex
     private String address;
-    @Index
+    @Unindex
     private String hotline;
-    @Index
+    @Unindex
     private String fax;
     @Index
     private String cityId;
+    @Index
+    private int status;
 
     public Theater() {
+
     }
 
     public Theater(String theaterId, String theaterName, String address, String hotline, String fax) {
@@ -80,6 +84,14 @@ public class Theater {
 
     public void setCityId(String cityId) {
         this.cityId = cityId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Document toSearchDocument(){

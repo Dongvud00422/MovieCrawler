@@ -1,0 +1,80 @@
+.form-group .col-md-2 {
+    padding-right: 10px;
+    padding-left: 0px;
+}
+.form-group .col-md-1{
+    padding-left: 6px;
+}
+.dropdown-menu{
+    max-height: 200px;
+    overflow: scroll;
+}
+.menu_item{
+    margin-left: 270px;
+}
+.navbar-brand {
+    padding: 3px 30px;
+}
+hr {
+
+    border-top: 1px solid white;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+body{
+    background-color:#333;
+    color: white;
+    font-family: Arial;
+    padding-top: 52px;
+}
+h3{
+    text-align: center;
+}
+.type{
+    top: 10px;
+    left: 20px;
+    position: absolute;
+    background-color: red;
+    color: white;
+    border-radius: 4px;
+}
+.search-result{
+    position: relative;
+}
+
+/*----------------------------chuyển lên đầu trang-------------------*/
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 6px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #7CFC00;
+    color: white;
+    cursor: pointer;
+    padding: 13px;
+    border-radius: 10px;
+}
+
+#myBtn:hover {
+    background-color: #555;
+}
+
+
+.panel-footer{
+    background-color: #222222;
+    color: white;
+}
+.panel-footer hr{
+    border-top: 1px solid #fcfcfc;
+}
+.iconDT img{
+    margin: 10px 0;
+}
+
+/*-------snow-------*/

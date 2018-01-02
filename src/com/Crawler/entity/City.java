@@ -3,36 +3,38 @@ package com.Crawler.entity;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
+// Lưu thông tin thành phố.
 @Entity
 public class City {
-    // Lưu thông tin thành phố.
     @Id
-    private String cityId;
-    @Index
-    private String cityName;
+    private String id;
+
+    @Unindex
+    private String name;
 
     public City() {
     }
 
-    public City(String name, String cityId) {
-        this.cityName = name;
-        this.cityId = cityId;
+    public City(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
-        return cityName;
+        return name;
     }
 
     public void setName(String name) {
-        this.cityName = name;
-    }
-
-    public String getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+        this.name = name;
     }
 }

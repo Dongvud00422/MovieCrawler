@@ -5,45 +5,68 @@ import com.google.appengine.api.search.Field;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * - id cuả film chính là link trên trang.
+ * - phim khi insert, update, delete sẽ được update vào full text search.
+ * - search phim theo
+ *      + tên.
+ *      + thể loại.
+ *      + giờ chiếu.
+ *      + rạp.
+ * */
 @Entity
 public class Movie {
 
-    // Lưu thông tin các bộ phim.
     @Id
-    private String movieId; // Link phim.
-    @Index
-    private String movieName;
-    @Index
+    private String id; // Link phim.
+    @Unindex
+    private String name;
+    @Unindex
     private String poster;
-    @Index
+    @Unindex
     private int duration; // Thời lượng.
-    @Index
+    @Unindex
     private String language;// Ngôn ngữ.
-    @Index
+    @Unindex
     private String director; // Đạo diễn.
-    @Index
+    @Unindex
     private String actor; // Diễn viên.
-    @Index
+    @Unindex
     private String openAt; // Khởi chiếu.
-    @Index
+    @Unindex
     private String description; // Mô tả phim.
-    @Index
+    @Unindex
     private String trailer; // Link trailer.
-    @Index
+    @Unindex
     private String minAge; // Độ tuổi được phép xem phim.
     @Index
-    private String type;
+    private String type; // 2D, 3D
     @Index
     private int status; // 0: phim hết hạn công chiếu | 1: đã lấy thông tin | 2: chưa lấy thông tin
-    @Index
-    private ArrayList<Integer> categoryId;
 
     public Movie() {
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPoster() {
@@ -52,22 +75,6 @@ public class Movie {
 
     public void setPoster(String poster) {
         this.poster = poster;
-    }
-
-    public String getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
-    }
-
-    public String getMovieName() {
-        return movieName;
-    }
-
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
     }
 
     public int getDuration() {
@@ -150,27 +157,19 @@ public class Movie {
         this.status = status;
     }
 
-    public ArrayList<Integer> getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(ArrayList<Integer> categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public HashMap<String, String> validate() {
         HashMap<String, String> errors = new HashMap<>();
-        if (this.movieName == null || this.movieName.length() == 0) {
+        if (this.name == null || this.name.length() == 0) {
             errors.put("movieName", "Please enter movieName");
         }
-        if (this.movieId == null || this.movieId.length() == 0) {
-            errors.put("movieName", "Please enter movieName");
+        if (this.id == null || this.id.length() == 0) {
+            errors.put("id", "Please enter id");
         }
         if (this.actor == null || this.actor.length() == 0) {
-            errors.put("movieName", "Please enter movieName");
+            errors.put("actor", "Please enter actor");
         }
         if (this.description == null || this.description.length() == 0) {
-            errors.put("movieName", "Please enter movieName");
+            errors.put("description", "Please enter description");
         }
         if (this.duration < 0) {
             errors.put("duration", "Please enter duration");
@@ -201,18 +200,20 @@ public class Movie {
         return errors;
     }
 
-
     public Document toSearchDocument() {
         return Document.newBuilder()
-                .addField(Field.newBuilder().setName("type").setText(this.getType()))
-                .addField(Field.newBuilder().setName("openAt").setText(this.getOpenAt()))
-                .addField(Field.newBuilder().setName("movieId").setText(this.getMovieId()))
-                .addField(Field.newBuilder().setName("duration").setText(String.valueOf(this.getDuration())))
+                .addField(Field.newBuilder().setName("id").setText(this.getId()))
+                .addField(Field.newBuilder().setName("name").setText(this.getName()))
+                .addField(Field.newBuilder().setName("poster").setText(this.getPoster()))
+                .addField(Field.newBuilder().setName("duration").setNumber(this.getDuration()))
                 .addField(Field.newBuilder().setName("language").setText(this.getLanguage()))
                 .addField(Field.newBuilder().setName("director").setText(this.getDirector()))
                 .addField(Field.newBuilder().setName("description").setText(this.getDescription()))
                 .addField(Field.newBuilder().setName("actor").setText(this.getActor()))
-                .addField(Field.newBuilder().setName("movieName").setText(this.getMovieName()))
+                .addField(Field.newBuilder().setName("minAge").setText(this.getMinAge()))
+                .addField(Field.newBuilder().setName("type").setText(this.getType()))
+                .addField(Field.newBuilder().setName("openAt").setText(this.getOpenAt()))
+                .addField(Field.newBuilder().setName("trailer").setText(this.getTrailer()))
                 .build();
     }
 }

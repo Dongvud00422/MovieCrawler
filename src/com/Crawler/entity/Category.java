@@ -3,38 +3,39 @@ package com.Crawler.entity;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Unindex;
 
+// Lưu các thể loại phim.
 @Entity
 public class Category {
 
-    // Lưu các thể loại phim.
     @Id
-    private int categoryId;
-    @Index
-    private String categoryName;
+    private int id;
+    @Unindex
+    private String name;
 
-    public Category(int categoryId) {
-        this.categoryId = categoryId;
+    public Category(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public Category(int categoryId, String categoryName) {
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
+    public Category(int id) {
+        this.id = id;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public int getId() {
+        return id;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 }
