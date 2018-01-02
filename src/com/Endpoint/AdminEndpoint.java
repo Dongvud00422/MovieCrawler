@@ -1,13 +1,12 @@
 package com.Endpoint;
 
 import com.Crawler.entity.Account;
-import com.Crawler.entity.ResponseMessage;
+import com.Crawler.entity.gson.ResponseMessage;
 import com.google.gson.JsonSyntaxException;
 import com.googlecode.objectify.ObjectifyService;
 import com.untility.RestfulHelper;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-@WebServlet(name = "AdminEndpoint")
+
 public class AdminEndpoint extends HttpServlet {
 
     static{
@@ -40,10 +39,25 @@ public class AdminEndpoint extends HttpServlet {
             case "register":
                 registerAdmin(req,resp);
                 break;
+            case "checkAccount":
+                checkAccount(req,resp);
+                break;
             default:
                 resp.setStatus(400);
                 ResponseMessage responseMessage = new ResponseMessage(400, "Bad request", "URI is split");
                 resp.getWriter().println(RestfulHelper.gson.toJson(responseMessage));
+        }
+
+    }
+
+    private void checkAccount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String content = RestfulHelper.parseStringInputStream(req.getInputStream());
+        Account check = RestfulHelper.gson.fromJson(content,Account.class);
+        Account admin = ofy().load().type(Account.class).id(check.getAccount()).now();
+        if (admin == null){
+            resp.getWriter().println("ok");
+        } else {
+            resp.getWriter().println("exist");
         }
 
     }
@@ -72,6 +86,7 @@ public class AdminEndpoint extends HttpServlet {
         try {
             String content = RestfulHelper.parseStringInputStream(req.getInputStream());
             Account admin = RestfulHelper.gson.fromJson(content,Account.class);
+
             HashMap<String,String> errors = admin.validate();
             if (errors.size() > 0 ){
                 resp.setStatus(400);

@@ -1,6 +1,9 @@
-package com.Crawler.controller.CGVCrawler;
+package com.Crawler.controller;
 
-import com.Crawler.entity.*;
+import com.Crawler.entity.City;
+import com.Crawler.entity.Movie;
+import com.Crawler.entity.Showtime;
+import com.Crawler.entity.Theater;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.untility.Convert;
@@ -49,13 +52,13 @@ public class CrawlCgvController {
             City city = new City();
             city.setId(cityId);
             city.setName(cityName);
-            System.out.println(city.getName());
-            System.out.println(RestfulHelper.gson.toJson(city));
-            Jsoup.connect("https://flashmovie-fpt.appspot.com/_api/v1/city")
-                    .ignoreContentType(true)
-                    .requestBody(RestfulHelper.gson.toJson(city))
-                    .post();
             cities.add(city);
+
+            System.out.println(RestfulHelper.gson.toJson(city));
+//            Jsoup.connect("https://turnkey-triumph-190604.appspot.com/crawler/city")
+//                    .ignoreContentType(true)
+//                    .requestBody(RestfulHelper.gson.toJson(city))
+//                    .post();
 
             for (int j = 0; j < listElementsCinema.size(); j++) {
                 Elements listTheater = listElementsCinema.get(j).getElementsByClass(cityId);
@@ -67,10 +70,16 @@ public class CrawlCgvController {
                     theater.setCityId(cityId);
                     theater.setTheaterName(theaterName);
                     theaters.add(theater);
+
+//                    Jsoup.connect("https://turnkey-triumph-190604.appspot.com/crawler/theater")
+//                            .ignoreContentType(true)
+//                            .requestBody(RestfulHelper.gson.toJson(theater))
+//                            .post();
                 }
             }
         }
         ofy().save().entities(cities).now();
+
         ofy().save().entities(theaters).now();
         LOG.info("Get city  & theater base info success.");
     }
@@ -100,6 +109,11 @@ public class CrawlCgvController {
             String hotline = cgvCoreData.select(".hotline .fax-input").text();
             updateTheater.setHotline(hotline);
             updateTheaters.add(updateTheater);
+
+//            Jsoup.connect("https://turnkey-triumph-190604.appspot.com/crawler/theater")
+//                    .ignoreContentType(true)
+//                    .requestBody(RestfulHelper.gson.toJson(updateTheater))
+//                    .post();
         }
         Map<Key<Theater>, Theater> a = ofy().save().entities(updateTheaters).now();
         if (a != null) {
@@ -134,7 +148,6 @@ public class CrawlCgvController {
                     movie.setName(filmName);
                     movie.setPoster(poster);
 
-
                     Elements type = filmList.get(a).select(".film-right .film-screen");
                     Elements showTimes = filmList.get(a).select(".film-right .film-showtimes");
                     for (int b = 0; b < type.size(); b++) {
@@ -145,32 +158,35 @@ public class CrawlCgvController {
                         movie.setId(filmId);
                         listMovies.add(movie);
 
+//                        Jsoup.connect("https://turnkey-triumph-190604.appspot.com/crawler/movie")
+//                                .ignoreContentType(true)
+//                                .requestBody(RestfulHelper.gson.toJson(movie))
+//                                .post();
+
                         for (int c = 0; c < show.size(); c++) {
                             try {
-                            System.out.println("link "+show.get(c).select("a").attr("href"));
+                                System.out.println("link " + show.get(c).select("a").attr("href"));
+                                String showid = show.get(c).select("a").attr("href").split("id/")[1].trim();
+                                String time = show.get(c).select("span:first-child").text().split(" ")[0].trim();
+                                String slot = show.get(c).select("span:last-child").text().split(" ")[0];
 
-                            String showid = show.get(c).select("a").attr("href").split("id/")[1].trim();
-                            System.out.println("ok1");
+                                Showtime showTime = new Showtime();
+                                showTime.setTheaterId(theater.getTheaterId());
+                                showTime.setId(Long.valueOf(showid));
+                                showTime.setMovieId(filmId);
+                                showTime.setSlotLeft(Integer.parseInt(slot));
+                                showTime.setStatus(1);
+                                showTime.setMovieType(language);
+                                String t = day + "/" + month + " " + time;
+                                long s = Convert.dateTimeToMilisecond(t);
+                                showTime.setStartTimeMLS(s);
+                                listShowtimes.add(showTime);
 
-                            String time = show.get(c).select("span:first-child").text().split(" ")[0].trim();
-                            System.out.println("ok2");
-
-                            String slot = show.get(c).select("span:last-child").text().split(" ")[0];
-                            System.out.println("ok3");
-
-
-                            Showtime showTime = new Showtime();
-                            showTime.setTheaterId(theater.getTheaterId());
-                            showTime.setId(Long.valueOf(showid));
-                            showTime.setMovieId(filmId);
-                            showTime.setSlotLeft(Integer.parseInt(slot));
-                            showTime.setStatus(1);
-                            showTime.setMovieType(language);
-                            String t = day + "/" + month + " " + time;
-                            long s = Convert.dateTimeToMilisecond(t);
-                            showTime.setStartTimeMLS(s);
-                            listShowtimes.add(showTime);
-                            } catch (Exception e){
+//                                Jsoup.connect("https://turnkey-triumph-190604.appspot.com/crawler/showtime")
+//                                        .ignoreContentType(true)
+//                                        .requestBody(RestfulHelper.gson.toJson(showTime))
+//                                        .post();
+                            } catch (Exception e) {
                                 System.out.println("no url");
                             }
 
@@ -192,14 +208,14 @@ public class CrawlCgvController {
     }
 
     public void getMovieInfo() throws Exception {
-        List<Movie> existMovie = ofy().load().type(Movie.class).filter("status",2).list();
+        List<Movie> existMovie = ofy().load().type(Movie.class).filter("status", 2).list();
         List<Movie> updateMovies = new ArrayList<>();
 
         for (Movie movie : existMovie) {
             System.out.println(movie.getId());
             cgvCoreData = loadDocument(movie.getId());
 
-            String duration = "", language = "", director = "", actor = "", openAt = "", description = "", trailer = "", category = "", minAge = "",type="";
+            String duration = "", language = "", director = "", actor = "", openAt = "", description = "", trailer = "", category = "", minAge = "", type = "";
             try {
                 duration = cgvCoreData.select(".movie-actress div").get(1).text().split(" ")[0].trim();
                 language = cgvCoreData.select(".movie-language div").text();
@@ -233,8 +249,13 @@ public class CrawlCgvController {
                 FullTextSearchHandle.add(updateMovie.toSearchDocument());
 
                 updateMovies.add(updateMovie);
+
+//                Jsoup.connect("https://turnkey-triumph-190604.appspot.com/crawler/movie")
+//                        .ignoreContentType(true)
+//                        .requestBody(RestfulHelper.gson.toJson(updateMovie))
+//                        .post();
             } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace(System.err);
+                System.out.println("err");
 
             }
             if (ofy().save().entities(updateMovies).now() != null) {

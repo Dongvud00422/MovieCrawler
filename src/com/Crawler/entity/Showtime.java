@@ -23,6 +23,18 @@ public class Showtime {
     private long endTimeMLS;
     @Unindex
     private int slotLeft; // Số ghế trống.
+    @Index
+    private int status;
+    @Unindex
+    private String movieType;
+
+    public String getMovieType() {
+        return movieType;
+    }
+
+    public void setMovieType(String movieType) {
+        this.movieType = movieType;
+    }
 
     public long getId() {
         return id;
@@ -70,6 +82,14 @@ public class Showtime {
 
     public void setSlotLeft(int slotLeft) {
         this.slotLeft = slotLeft;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public HashMap<String, String> validate(){

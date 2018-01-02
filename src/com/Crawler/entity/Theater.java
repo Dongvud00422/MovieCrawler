@@ -1,11 +1,11 @@
 package com.Crawler.entity;
 
-import com.google.appengine.api.search.Document;
-import com.google.appengine.api.search.Field;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Unindex;
+
+import java.util.HashMap;
 
 // Thông tin các cụm rạp.
 @Entity
@@ -94,10 +94,10 @@ public class Theater {
         this.status = status;
     }
 
-    public Document toSearchDocument(){
-        return Document.newBuilder()
-                .addField(Field.newBuilder().setName("theaterName").setText(this.getTheaterName()))
-                .addField(Field.newBuilder().setName("theaterId").setText(this.getTheaterId()))
-                .build();
+    public HashMap<String, String> validate() {
+        HashMap<String, String> errors = new HashMap<>();
+        return errors;
     }
+
+
 }

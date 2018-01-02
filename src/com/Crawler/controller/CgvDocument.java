@@ -1,4 +1,4 @@
-package com.Crawler.controller.CGVCrawler;
+package com.Crawler.controller;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

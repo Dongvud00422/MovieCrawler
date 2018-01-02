@@ -9,6 +9,7 @@ import com.googlecode.objectify.annotation.Unindex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * - id cuả film chính là link trên trang.
@@ -24,6 +25,8 @@ public class Movie {
 
     @Id
     private String id; // Link phim.
+    @Index
+    private String category;
     @Unindex
     private String name;
     @Unindex
@@ -157,6 +160,14 @@ public class Movie {
         this.status = status;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public HashMap<String, String> validate() {
         HashMap<String, String> errors = new HashMap<>();
         if (this.name == null || this.name.length() == 0) {
@@ -205,7 +216,7 @@ public class Movie {
                 .addField(Field.newBuilder().setName("id").setText(this.getId()))
                 .addField(Field.newBuilder().setName("name").setText(this.getName()))
                 .addField(Field.newBuilder().setName("poster").setText(this.getPoster()))
-                .addField(Field.newBuilder().setName("duration").setNumber(this.getDuration()))
+                .addField(Field.newBuilder().setName("duration").setText(String.valueOf(this.getDuration())))
                 .addField(Field.newBuilder().setName("language").setText(this.getLanguage()))
                 .addField(Field.newBuilder().setName("director").setText(this.getDirector()))
                 .addField(Field.newBuilder().setName("description").setText(this.getDescription()))

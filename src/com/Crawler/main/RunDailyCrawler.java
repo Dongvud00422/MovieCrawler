@@ -1,6 +1,6 @@
 package com.Crawler.main;
 
-import com.Crawler.controller.CGVCrawler.CrawlCgvController;
+import com.Crawler.controller.CrawlCgvController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +20,10 @@ public class RunDailyCrawler extends HttpServlet {
             CrawlCgvController crawlData = new CrawlCgvController();
             crawlData.getShowTimeInfo();
             System.out.println("done showtime");
-           // crawlData.getMovieInfo();
+            crawlData.getMovieInfo();
             System.out.println("done movie");
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.warning(e.getMessage());
         }
     }

@@ -41,21 +41,26 @@ public class FullTextSearchHandle {
         List<Movie> listMovie = new ArrayList<>();
         Results<ScoredDocument> results = index.search(keyword);
         if (results != null && results.getNumberReturned() > 0) {
+            Movie movie = new Movie();
+            movie.setId("");
             for (ScoredDocument document : results) {
+//                if (movie.getId().equalsIgnoreCase(document.getOnlyField("id").getText())){
+//                    System.out.println("conn");
+//                    continue;
+//                }
                 try {
-                    Movie movie = new Movie();
-                    movie.setType(document.getOnlyField("type").getText());
-                    //movie.setTrailer(document.getOnlyField("trailer").getText());
-                    //movie.setPoster(document.getOnlyField("poster").getText());
+//                    movie.setType(document.getOnlyField("type").getText());
+                    movie.setTrailer(document.getOnlyField("trailer").getText());
+                    movie.setPoster(document.getOnlyField("poster").getText());
                     movie.setOpenAt(document.getOnlyField("openAt").getText());
-                    movie.setMovieId(document.getOnlyField("movieId").getText());
+                    movie.setId(document.getOnlyField("id").getText());
                     movie.setDuration(Integer.parseInt(document.getOnlyField("duration").getText()));
                     movie.setLanguage(document.getOnlyField("language").getText());
                     movie.setDirector(document.getOnlyField("director").getText());
                     movie.setDescription(document.getOnlyField("description").getText());
                     movie.setActor(document.getOnlyField("actor").getText());
-                    movie.setMovieName(document.getOnlyField("movieName").getText());
-                    //movie.setMinAge(document.getOnlyField("minAge").getText());
+                    movie.setName(document.getOnlyField("name").getText());
+                    movie.setMinAge(document.getOnlyField("minAge").getText());
                     listMovie.add(movie);
                 } catch (Exception e) {
                     logger.severe("Convert document lỗi.");

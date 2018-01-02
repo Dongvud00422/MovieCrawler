@@ -1,4 +1,4 @@
-package com.Crawler.entity.json;
+package com.Crawler.entity.gson;
 
 public class ListResponsePutSW {
 }

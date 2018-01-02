@@ -26,6 +26,10 @@ public class Account {
     @Index
     private int status; // 0: không hoạt động , 1: có hoạt động
 
+    public Account() {
+
+    }
+
     public String getAccount() {
         return account;
     }

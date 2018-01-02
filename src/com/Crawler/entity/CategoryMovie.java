@@ -14,7 +14,7 @@ public class CategoryMovie {
     @Index
     private int categoryId;
 
-    public CategoryMovie(String id, String movieId, int categoryId) {
+    public CategoryMovie(String movieId, int categoryId) {
         this.movieId = movieId;
         this.categoryId = categoryId;
         this.id = movieId + "_" + categoryId;

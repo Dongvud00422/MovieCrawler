@@ -1,6 +1,6 @@
 package com.Crawler.main;
 
-import com.Crawler.controller.CGVCrawler.CrawlCgvController;
+import com.Crawler.controller.CrawlCgvController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
